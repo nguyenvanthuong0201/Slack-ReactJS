@@ -18,7 +18,7 @@ function SidebarOption({Icon,title,addChannelOption}) {
         <SidebarOptionContainer
         onClick={addChannelOption ? addChannel : selectChannel}>
             {Icon && <Icon fontSize="small" style={{padding:10}}/> }
-            {Icon ? (<h3>{title}</h3>):(<SideBarOptionChannel><span>#</span></SideBarOptionChannel>)}
+            {Icon ? (<h3>{title}</h3>):(<SideBarOptionChannel><span>#</span>{title}</SideBarOptionChannel>)}
         </SidebarOptionContainer>
     )
 }
@@ -36,11 +36,14 @@ const SidebarOptionContainer = styled.div`
         background-color: #340e36;
     }
     > h3 {
-        font-weight: 900;
+        font-weight: 300;
     }
     > h3 > span{
         padding: 15px;
     }
 `;
 
-const SideBarOptionChannel = styled.div``;
+const SideBarOptionChannel = styled.h3`
+    padding: 10px 0;
+    font-weight: 300;
+`;
