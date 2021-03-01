@@ -1,11 +1,14 @@
 import { Button } from "@material-ui/core";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { db } from "../firebase";
+import { auth, db } from "../firebase";
 import firebase from "firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+
 function ChatInput({ channelName, channelId,chatRef }) {
   const [input, setInput] = useState("");
-  console.log("channelId", channelId);
+  const [user] = useAuthState(auth);
+  
   const sendMessage = (e) => {
     e.preventDefault();
     if (!channelId) {
@@ -15,9 +18,9 @@ function ChatInput({ channelName, channelId,chatRef }) {
       message: input,
       /// lấy time trong firebase
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      user: "Thương Nguyễn ",
-      userImage:
-        "https://scontent.fsgn2-2.fna.fbcdn.net/v/t1.0-1/p200x200/149351234_744141612897095_8519546040616884683_o.jpg?_nc_cat=111&ccb=3&_nc_sid=7206a8&_nc_ohc=-INl0w429VAAX9ZRR08&_nc_ht=scontent.fsgn2-2.fna&tp=6&oh=e8c84f8d399884bae0d2a8376e1852ab&oe=60623B43",
+      user: user.displayName,
+      userImage:user.photoURL
+    
     });
     /// hàm kéo xuống bằng UseRef
     chatRef?.current?.scrollIntoView({

@@ -15,7 +15,7 @@ function Chat() {
   const [roomDetails] = useDocument(
     roomId && db.collection("rooms").doc(roomId)
   );
-  const [roomMessages,loading] = useCollection(
+  const [roomMessages, loading] = useCollection(
     roomId &&
       db
         .collection("rooms")
@@ -24,44 +24,51 @@ function Chat() {
         .orderBy("timestamp", "asc")
   );
   useEffect(() => {
-      chatRef?.current?.scrollIntoView({
-          behavior:"smooth",
-      });
-  
-  }, [roomId,loading])
+    chatRef?.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [roomId, loading]);
 
   return (
     <ChatContainer>
-      <Header>
-        <HeaderLeft>
-          <h4>
-            <strong>{`#${roomDetails?.data().name}`} </strong>
-          </h4>
-          <StarOutlineIcon />
-        </HeaderLeft>
-        <HeaderRight>
-          <p>
-            <InfoIcon /> Details
-          </p>
-        </HeaderRight>
-      </Header>
-      <ChatMessages>
-        {roomMessages?.docs.map((doc) => {
-          const { message, timestamp, user, userImage } = doc.data();
-          return (
-            <Message
-              key={doc.id}
-              message={message}
-              timestamp={timestamp}
-              user={user}
-              userImage={userImage}
-            />
-          );
-        })}
-        {/* Tìm Hiểu UseRef */}
-        <ChatBottom ref={chatRef}/>
-      </ChatMessages>
-      <ChatInput chatRef={chatRef} channelId={roomId} channelName={roomDetails?.data().name} />
+      {roomDetails && roomMessages && (
+        <>
+          <Header>
+            <HeaderLeft>
+              <h4>
+                <strong>{`#${roomDetails?.data().name}`} </strong>
+              </h4>
+              <StarOutlineIcon />
+            </HeaderLeft>
+            <HeaderRight>
+              <p>
+                <InfoIcon /> Details
+              </p>
+            </HeaderRight>
+          </Header>
+          <ChatMessages>
+            {roomMessages?.docs.map((doc) => {
+              const { message, timestamp, user, userImage } = doc.data();
+              return (
+                <Message
+                  key={doc.id}
+                  message={message}
+                  timestamp={timestamp}
+                  user={user}
+                  userImage={userImage}
+                />
+              );
+            })}
+            {/* Tìm Hiểu UseRef */}
+            <ChatBottom ref={chatRef} />
+          </ChatMessages>
+          <ChatInput
+            chatRef={chatRef}
+            channelId={roomId}
+            channelName={roomDetails?.data().name}
+          />
+        </>
+      )}
     </ChatContainer>
   );
 }
